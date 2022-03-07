@@ -11,8 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.esprit.pidev.filter.CustomAuthFilter;
+import com.esprit.pidev.filter.CustomAuthorizationFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,10 +33,14 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
 	}
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		CustomAuthFilter customAuthFilter = new CustomAuthFilter(authenticationManagerBean()) ; 
 		http.csrf().disable();
 		http.sessionManagement ().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.authorizeRequests ().anyRequest().permitAll();
-		http.addFilter (new CustomAuthFilter(authenticationManagerBean()));
+		http.authorizeRequests().antMatchers("/LevelUp/login","/LevelUp/user/token/refresh").permitAll() ; 
+		http.authorizeRequests().antMatchers("/LevelUp/user/users/").hasAnyAuthority("ROLE_EMPLOYEE") ; 
+		http.authorizeRequests ().anyRequest().authenticated();
+		http.addFilter (customAuthFilter);
+		http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class) ; 
 	}	
 		
 	@Bean 

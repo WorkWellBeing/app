@@ -11,5 +11,5 @@ public interface ServiceIUser {
 	public User findUserByUserName(String username); 
 	public Role saveRole(Role role);
 	void addRoleToUser ( String username , String roleName ) ; 
-	List<User> getUsers(); 
+	List<User> getUsers();
 }
