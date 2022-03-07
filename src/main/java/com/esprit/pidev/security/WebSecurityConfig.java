@@ -1,30 +1,47 @@
 package com.esprit.pidev.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.esprit.pidev.services.MyUserDetailsService;
+import com.esprit.pidev.filter.CustomAuthFilter;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
 	@Autowired
-	private MyUserDetailsService userDetailsService;
+	private  UserDetailsService userDetailsServices ;  
+	
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-	auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);}
+	auth.userDetailsService(userDetailsServices).passwordEncoder(passwordEncoder);
+	}
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-	http.authorizeRequests() .antMatchers("/**").permitAll()
-	.anyRequest()
-	.authenticated()
-	.and()
-	.httpBasic().and().csrf().disable();
+		http.csrf().disable();
+		http.sessionManagement ().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.authorizeRequests ().anyRequest().permitAll();
+		http.addFilter (new CustomAuthFilter(authenticationManagerBean()));
+	}	
+		
+	@Bean 
+	@Override 
+	public AuthenticationManager authenticationManagerBean() throws Exception{
+		return super.authenticationManagerBean() ; 
 	}
+	
+	
 	}

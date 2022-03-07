@@ -14,26 +14,21 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Getter 
-@Setter
-@AllArgsConstructor 
-@NoArgsConstructor 
+
 public class User implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id ; 
 	@Column
 	private String userName ; 
@@ -54,16 +49,19 @@ public class User implements Serializable{
 	@Column
 	private boolean isVerified; 
 	@Column
+	private boolean isAbrroved; 
+	@Column
 	private int points ; 
-	@Enumerated(EnumType.STRING)
 	
 	@OneToMany(mappedBy="user", 
 			cascade={CascadeType.PERSIST, },
 			fetch=FetchType.EAGER)
 	private List<Notification> notifications;
-	@ManyToMany(cascade = CascadeType.PERSIST, fetch =FetchType.EAGER ) 
+	@ManyToMany(cascade={CascadeType.PERSIST} , fetch =FetchType.EAGER ) 
 	private Set<Role> roles ;
 	
+	@JsonIgnore
+	private Departement departement;
 	
 	
 	public User() {
@@ -71,7 +69,7 @@ public class User implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 	public User(int id, String userName, String name, String lastName, Date birthDate, String currentPosition,
-			int phone, String email, String password, boolean isVerified, int points, List<Notification> notifications,
+			int phone, String email, String password, boolean isVerified,boolean isAbrroved ,Departement departement ,  int points, List<Notification> notifications,
 			Set<Role> roles) {
 		super();
 		this.id = id;
@@ -165,6 +163,18 @@ public class User implements Serializable{
 	}
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+	public boolean isAbrroved() {
+		return isAbrroved;
+	}
+	public void setAbrroved(boolean isAbrroved) {
+		this.isAbrroved = isAbrroved;
+	}
+	public Departement getDepartement() {
+		return departement;
+	}
+	public void setDepartement(Departement departement) {
+		this.departement = departement;
 	}
 	
 
