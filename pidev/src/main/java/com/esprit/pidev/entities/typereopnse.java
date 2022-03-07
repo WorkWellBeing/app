@@ -1,12 +1,12 @@
 package com.esprit.pidev.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,17 +18,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Likee implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class typereopnse {
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	@Column(name="idl")
-
-Long idd;
-	int etatlike;
+	Long idr;
+	int reponse;
+	@ManyToOne
+	Question question ;
 
 }

@@ -1,14 +1,8 @@
 package com.esprit.pidev.entities;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +29,8 @@ public class Comment implements Serializable{
 	@Column(name="idc")
 	private Long idc;
 	String commenta;
-	@ManyToOne
+	@ManyToOne(cascade={CascadeType.ALL})
 	Post posts;
-
+	@ManyToOne(cascade={CascadeType.ALL})
+	User user;
 }

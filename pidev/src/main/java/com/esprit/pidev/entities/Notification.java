@@ -12,10 +12,7 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 
 
@@ -27,21 +24,19 @@ public class Notification implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id ; 
 	@Column
 	private String title ; 
 	@Column
 	private String description ; 
-	@ManyToOne
-	@JsonIgnore
-	private User user;
+	
 	public Notification(int id, String title, String description, User user) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
-		this.user = user;
+		
 	}
 	public Notification() {
 		super();
@@ -65,12 +60,7 @@ public class Notification implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
+	
 	
 	
 	

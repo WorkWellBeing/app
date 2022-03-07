@@ -1,16 +1,16 @@
 package com.esprit.pidev.entities;
 
-
 import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
@@ -35,13 +35,12 @@ public class Formulaire implements Serializable {
 	Long idf;
 	String title; 
 	
-	@OneToMany( mappedBy="formulaire" ,cascade={CascadeType.PERSIST, CascadeType.REMOVE},
-			fetch=FetchType.EAGER)
+	@OneToMany( mappedBy="formulaire" ,cascade={CascadeType.ALL})
 
 			
 
 	private List<Question> questions;
-	
+	@ManyToOne
+	User user;
 
 }
-

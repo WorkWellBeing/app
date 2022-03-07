@@ -19,14 +19,15 @@ GenerationType.AUTO)
 private int id;
 @Enumerated(EnumType.STRING)
 private RoleName role;
+
+public Role() {
+	super();
+	// TODO Auto-generated constructor stub
+}
 public Role(int id, RoleName role) {
 	super();
 	this.id = id;
 	this.role = role;
-}
-public Role() {
-	super();
-	// TODO Auto-generated constructor stub
 }
 public int getId() {
 	return id;
@@ -41,5 +42,6 @@ public String getRole() {
 public void setRole(RoleName role) {
 	this.role = role;
 }
+
 
 }
