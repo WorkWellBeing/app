@@ -1,15 +1,18 @@
 package com.esprit.pidev.entities;
-
 import lombok.*;
 
 import javax.persistence.*;
 
 import org.springframework.lang.NonNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -31,11 +34,13 @@ public class Event implements Serializable {
     @Column
     private int event_id;
 
-    @Column
+	@Column
     @Temporal(TemporalType.DATE)
+   
     private Date eventDate;
 
     @Column
+    
     private String EventName;
 
     @Column
@@ -45,9 +50,17 @@ public class Event implements Serializable {
     @Column
     private int points;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private String location;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="event")
-    private List<Participation> Participations;
+    private int capacity;
+    
+    @JsonBackReference
+    @ManyToOne
+       
+        private User user;
+    
+  @OneToMany(targetEntity = Participation.class,cascade = CascadeType.ALL, mappedBy="event")
+  
+    
+    private Set<Participation> participations=new HashSet<Participation>();
 }

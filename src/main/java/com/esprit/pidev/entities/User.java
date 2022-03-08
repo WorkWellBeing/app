@@ -1,7 +1,6 @@
 package com.esprit.pidev.entities;
 
 import java.io.Serializable;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -15,16 +14,18 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.esprit.pidev.entities.Abonnement;
+import com.esprit.pidev.entities.Activity;
+import com.esprit.pidev.entities.Event;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.esprit.pidev.entities.Participation;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.*;
 
 @Entity
 
@@ -34,8 +35,8 @@ public class User implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id ; 
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id ; 
 	@Column
 	private String userName ; 
 	@Column
@@ -55,51 +56,65 @@ public class User implements Serializable{
 	@Column
 	private boolean isVerified; 
 	@Column
+	private boolean isAbrroved; 
+	@Column
 	private int points ; 
-	@Enumerated(EnumType.STRING)
 	
-	@OneToMany(mappedBy="user", 
-			cascade={CascadeType.PERSIST, },
-			fetch=FetchType.LAZY)
-	private List<Notification> notifications;
-	@ManyToMany(cascade = CascadeType.PERSIST, fetch =FetchType.EAGER ) 
+	
+	@ManyToMany(cascade={CascadeType.PERSIST} , fetch =FetchType.EAGER ) 
 	private Set<Role> roles ;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="User",fetch=FetchType.LAZY)
-	private List <Comment> Comment;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="User",fetch=FetchType.LAZY)
-	private List <Post> posts;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="user",fetch=FetchType.LAZY)
+	private  Set<Post> posts;
 	
-	@OneToMany(mappedBy="user", 
-			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
-			fetch=FetchType.LAZY)
-	private List<Rate_User> rateUsers;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+	private List <Comment> comments;
 	
-	@OneToMany(mappedBy="user", 
-			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
-			fetch=FetchType.LAZY)
-	private List<Rater> raters;
 	
-	@OneToOne
-	private Evaluation evaluation;
 	
-	@OneToMany(mappedBy="user", 
-			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
-			fetch=FetchType.LAZY)
-	private List<LikeTrophee> likeTrophees;
+	@OneToMany( mappedBy="user" ,cascade={CascadeType.ALL})
+private List<Formulaire> formulairess;
 	
-	@OneToMany(mappedBy="user", 
-			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
-			fetch=FetchType.LAZY)
-	private List<Formulaire_User> formulaireUsers;
+	 @OneToMany(cascade = CascadeType.ALL, mappedBy="user",fetch = FetchType.LAZY)
+	 private Set<Abonnement> abonnements=new HashSet<Abonnement>();
+     
+     @OneToMany(targetEntity = Participation.class,cascade = CascadeType.ALL, mappedBy="user",fetch = FetchType.LAZY)
+     private Set<Participation> participations=new HashSet<Participation>();
+     
+     @OneToMany(cascade = CascadeType.ALL, mappedBy="user",fetch = FetchType.LAZY)
+     
+     private Set<Event> events=new HashSet<Event>();
+     
+     @OneToMany(cascade = CascadeType.ALL, mappedBy="user",fetch = FetchType.LAZY)
+      private Set<Activity> activities=new HashSet<Activity>();
+     
+     @OneToMany(mappedBy="user", 
+ 			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
+ 			fetch=FetchType.LAZY)
+ 	private List<Rate_User> rateUsers;
+ 	
+ 	
+ 	
+ 	@OneToOne(mappedBy="user")
+ 	private Evaluation evaluation;
+ 	
+ 	
+ 	
+ 	@OneToMany(mappedBy="user", 
+ 			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
+ 			fetch=FetchType.LAZY)
+ 	private List<Quiz_User> quizUsers;
+	
+	@JsonIgnore
+	private Departement departement;
+	
 	
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public User(int id, String userName, String name, String lastName, Date birthDate, String currentPosition,
-			int phone, String email, String password, boolean isVerified, int points, List<Notification> notifications,
+	public User(Long id, String userName, String name, String lastName, Date birthDate, String currentPosition,
+			int phone, String email, String password, boolean isVerified,boolean isAbrroved ,Departement departement ,  int points, List<Notification> notifications,
 			Set<Role> roles) {
 		super();
 		this.id = id;
@@ -113,19 +128,18 @@ public class User implements Serializable{
 		this.password = password;
 		this.isVerified = isVerified;
 		this.points = points;
-		this.notifications = notifications;
+		
 		this.roles = roles;
 	}
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setId(Long id) {
+		this.id =  id;
 	}
 	public String getUserName() {
 		return userName;
 	}
-	
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
@@ -183,36 +197,28 @@ public class User implements Serializable{
 	public void setPoints(int points) {
 		this.points = points;
 	}
-	public List<Notification> getNotifications() {
-		return notifications;
-	}
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
-	}
+	
 	public Set<Role> getRoles() {
 		return roles;
 	}
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
+	public boolean isAbrroved() {
+		return isAbrroved;
+	}
+	public void setAbrroved(boolean isAbrroved) {
+		this.isAbrroved = isAbrroved;
+	}
+	public Departement getDepartement() {
+		return departement;
+	}
+	public void setDepartement(Departement departement) {
+		this.departement = departement;
+	}
 	
 
 	
-
-
-	@OneToMany(cascade = CascadeType.ALL)
-	private Set<Comment> comments;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="user",fetch = FetchType.LAZY)
-    private List<Abonnement> abonnements;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="user",fetch = FetchType.LAZY)
-    private List<Participation> Participations;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="user",fetch = FetchType.LAZY)
-    private List<Event> events;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="user",fetch = FetchType.LAZY)
-    private List<Activity> activities;
 
 }

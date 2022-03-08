@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -41,11 +42,14 @@ public class Trophee implements Serializable{
 	@Column
 	private int nbDislike;
 	
+	@Column
+	private int points;
+	
+	@ElementCollection
+	private List<User> voterPar;
+	
 	@ManyToMany(mappedBy="trophees", cascade = CascadeType.ALL)
 	private List<Evaluation> evaluations;
+
 	
-	@OneToMany(mappedBy="trophee", 
-			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
-			fetch=FetchType.EAGER)
-	private List<LikeTrophee> likeTrophees;
 }

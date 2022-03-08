@@ -38,7 +38,7 @@ public class Activity implements Serializable{
     @Column
     private int Activity_id;
 	 @Column
-	 private String acitivity_name;
+	 private String activity_name;
 	 @Column
 	 private String description;
 	 @Column

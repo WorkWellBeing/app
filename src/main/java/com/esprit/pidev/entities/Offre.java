@@ -4,12 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,12 +35,15 @@ public class Offre implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idOffre;
-	private String type_offre;
+	
 	private String code;
 	private int discount;
-	@OneToMany(mappedBy = "offre")
-	private Set<Partner> partners;
-}
+	@Enumerated(EnumType.STRING)
+	private Type_offre type_offre;
+	@ManyToOne
+	@JsonIgnore
+	private Partner partner;
+	}
 	
 	
 	

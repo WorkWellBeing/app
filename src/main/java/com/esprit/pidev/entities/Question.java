@@ -8,7 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,16 +33,17 @@ public class Question implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	@Column(name="idq")
-	Long	idq;
-	@Column
-	String question;
-	@Enumerated(EnumType.STRING)
-	private Answer reponse;
-	
-	@ManyToOne
-	Formulaire formulaire ;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="question")
-	private List<AnswerQuiz> answerQuizs;
+
+
+Long	idq;
+String question;
+
+@ManyToOne
+Formulaire formulaire ;
+
+@OneToMany( mappedBy="question" ,cascade={CascadeType.ALL})
+
+
+
+private List<typereopnse>  typereopnses;
 }
