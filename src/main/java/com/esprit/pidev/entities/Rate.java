@@ -33,6 +33,9 @@ public class Rate implements Serializable{
 	@Column
 	private String titre;
 	
+	@Column
+	private float pourcentagePoints;
+	
 	@OneToMany(mappedBy="rate", 
 			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
 			fetch=FetchType.EAGER)

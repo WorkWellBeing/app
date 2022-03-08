@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -36,15 +37,18 @@ public class Rate_User implements Serializable{
 	@Column
 	private int nbDislike;
 	
+	@Column
+	private int points;
+	
+	@ElementCollection
+	private List<User> raters;
+	
 	@ManyToOne
 	Rate rate;
 	
 	@ManyToOne
 	User user;
 	
-	@OneToMany(mappedBy="rateUser", 
-			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
-			fetch=FetchType.LAZY)
-	private List<Rater> raters;
+	
 	
 }

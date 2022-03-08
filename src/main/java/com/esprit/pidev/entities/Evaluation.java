@@ -32,10 +32,13 @@ public class Evaluation implements Serializable{
 	@Column 
 	private int score;
 	
+	@Column
+	private int compteur;
+	
 	@Column 
 	private int nbTrophee;
 	
-	@OneToOne(mappedBy="evaluation")
+	@OneToOne
 	private User user;
 	
 	@ManyToMany(cascade = CascadeType.ALL)

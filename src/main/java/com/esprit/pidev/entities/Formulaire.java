@@ -1,17 +1,16 @@
 package com.esprit.pidev.entities;
 
-
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
@@ -32,21 +31,16 @@ public class Formulaire implements Serializable {
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	@Column(name="idf")
+
 	Long idf;
-	@Column
 	String title; 
-	@Column
-	private Date postDateTime;
 	
-	@OneToMany(mappedBy="formulaire", 
-			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
-			fetch=FetchType.EAGER)
-	private List<Formulaire_User> formualaireUsers;
-	
-	@OneToMany( mappedBy="formulaire" ,cascade={CascadeType.PERSIST, CascadeType.REMOVE},
-			fetch=FetchType.LAZY)
+	@OneToMany( mappedBy="formulaire" ,cascade={CascadeType.ALL})
+
+			
+
 	private List<Question> questions;
-	
+	@ManyToOne
+	User user;
 
 }
-

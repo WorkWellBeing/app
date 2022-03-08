@@ -12,11 +12,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,17 +45,26 @@ public class Post implements Serializable {
 
 	String description;
 	String title;
-	//@Temporal (TemporalType.DATE)
+	
 	private Date dateCreation = new Date(System.currentTimeMillis());
 
 	@Enumerated(EnumType.STRING)
 	private type typepost;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="Post",fetch=FetchType.LAZY)
-	private List<Comment> Comment;
+	@OneToMany( mappedBy="posts" ,cascade={CascadeType.PERSIST, CascadeType.REMOVE},
+			fetch=FetchType.EAGER)
+
+			
+	@JsonIgnore
+
+	private List<Comment> Comments;
+	
 	
 	
 	@ManyToOne
-	private User User;
-
+	private User user;
+	//@ManyToOne
+	//private User User;
 	
+//	private List<User> Users;
+
 }

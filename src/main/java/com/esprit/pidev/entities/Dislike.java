@@ -1,13 +1,16 @@
 package com.esprit.pidev.entities;
 
 
+
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +22,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Dislike implements Serializable {
+public class Dislike  implements Serializable {
 	/**
 	 * 
 	 */
@@ -28,7 +31,12 @@ public class Dislike implements Serializable {
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	@Column(name="idd")
 
-Long idd;
+int idd;
 	int etatdislike;
+	
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	private User User;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Post posts;
 }
-
