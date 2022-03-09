@@ -1,8 +1,12 @@
 package com.esprit.pidev.services;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -24,10 +28,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
 public class ServiceImpIUser implements ServiceIUser ,UserDetailsService {
+	
+	private static final long EXPIRE_TOKEN_AFTER_MINUTES = 30;
 	@Autowired
 	private IUserRepository userRepository;
 	@Autowired
 	private IRoleRepository roleRepository;
+	
+	@Autowired
+	private ServiceINotification notificationService ; 
 
 	BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 	
@@ -56,6 +65,20 @@ public class ServiceImpIUser implements ServiceIUser ,UserDetailsService {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
 		user.setVerified(true);
+		user.setAbrroved(false);
+		String message = "There is a new user : "+user.getUserName()+"Waiting for verification " ; 
+
+		Collection<User> users = userRepository.findAll() ; 
+		for( User user1 : users ){
+			for( Role role : user1.getRoles()){
+				if(role.getRole()=="ADMIN"){
+					System.out.println(role.getRole());
+					notificationService.ajouterNotification(user1, message, "New User");
+
+				}
+			}
+			
+		}
 		return userRepository.save(user); 
 		
 		 
@@ -79,6 +102,97 @@ public class ServiceImpIUser implements ServiceIUser ,UserDetailsService {
 		return userRepository.findAll();
 	}
 
+
+
+
+	@Override
+	public void activerAccount(String username) {
+		User user =  userRepository.findByUserName(username);
+		user.setAbrroved(true);
+		userRepository.save(user) ; 
+	}
+
+
+
+
+	@Override
+	public String forgotPassword(String email) {
+		Optional<User> userOptional = Optional
+				.ofNullable(userRepository.findByEmail(email));
+
+		if (!userOptional.isPresent()) {
+			return "Invalid email id.";
+		}
+		User user = userOptional.get();
+		user.setToken(generateToken());
+		user.setTokenCreationDate(LocalDateTime.now());
+
+		user = userRepository.save(user);
+
+		return user.getToken();
+	}
+
+
+
+
+	@Override
+	public String resetPassword(String token, String password) {
+		Optional<User> userOptional = Optional
+				.ofNullable(userRepository.findByToken(token));
+
+		if (!userOptional.isPresent()) {
+			return "Invalid token.";
+		}
+
+		LocalDateTime tokenCreationDate = userOptional.get().getTokenCreationDate();
+
+		if (isTokenExpired(tokenCreationDate)) {
+			return "Token expired.";
+
+		}
+
+		User user = userOptional.get();
+
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		user.setToken(null);
+		user.setTokenCreationDate(null);
+
+		userRepository.save(user);
+
+		return "Your password successfully updated.";
+	}
+
+
+
+
+	@Override
+	public String generateToken() {
+		StringBuilder token = new StringBuilder();
+
+		return token.append(UUID.randomUUID().toString())
+				.append(UUID.randomUUID().toString()).toString();
+	}
+
+
+
+
+	@Override
+	public boolean isTokenExpired(LocalDateTime tokenCreationDate) {
+		LocalDateTime now = LocalDateTime.now();
+		Duration diff = Duration.between(tokenCreationDate, now);
+
+		return diff.toMinutes() >= EXPIRE_TOKEN_AFTER_MINUTES;
+	}
+
+
+
+
+	
+
+
+
+
+	
 
 
 }

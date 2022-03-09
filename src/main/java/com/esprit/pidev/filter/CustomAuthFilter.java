@@ -1,7 +1,7 @@
 package com.esprit.pidev.filter;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,7 +10,10 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,11 +25,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.esprit.pidev.repos.IUserRepository;
+import com.esprit.pidev.services.ServiceIUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-@Slf4j
+@Slf4j  
 public class CustomAuthFilter extends UsernamePasswordAuthenticationFilter{
+	
 	
 	private final AuthenticationManager authenticationManager;
 	public  CustomAuthFilter (AuthenticationManager authenticationManager) {
@@ -34,11 +41,10 @@ public class CustomAuthFilter extends UsernamePasswordAuthenticationFilter{
 	   } 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-			throws AuthenticationException {
-		// TODO Auto-generated method stub
+			throws AuthenticationException  {
 		String username = request.getParameter("username") ; 
 		String password = request.getParameter("password") ; 
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken (username , password) ; 
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken (username , password) ;
 		return authenticationManager.authenticate(authenticationToken) ; 
 	}
 
@@ -59,8 +65,6 @@ public class CustomAuthFilter extends UsernamePasswordAuthenticationFilter{
 		        .withExpiresAt(new Date(System.currentTimeMillis() + 30  * 60 * 1000))
 		       .withIssuer (request.getRequestURL ().toString())
 		        .sign(algorithm);
-		/*response.setHeader("access_token",access_token );
-		response.setHeader("refresh_token",refresh_token );*/
 		Map<String , String> tokens = new HashMap<>() ; 
 		tokens.put("access_token",access_token ) ; 
 		tokens.put("refresh_token",refresh_token ) ; 

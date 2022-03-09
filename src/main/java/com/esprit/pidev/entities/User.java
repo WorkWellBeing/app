@@ -1,6 +1,7 @@
 package com.esprit.pidev.entities;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +43,8 @@ public class User implements Serializable{
 	private String currentPosition ; 
 	@Column
 	private int phone ; 
-	@Column
+	@Column(unique=true)
+	//@Pattern(regex=".+\@.+\..+")
 	private String email ; 
 	@Column
 	private String password ; 
@@ -52,6 +54,10 @@ public class User implements Serializable{
 	private boolean isAbrroved; 
 	@Column
 	private int points ; 
+	
+	private String token;
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime tokenCreationDate;
 	
 	@OneToMany(mappedBy="user", 
 			cascade={CascadeType.PERSIST, },
@@ -175,6 +181,18 @@ public class User implements Serializable{
 	}
 	public void setDepartement(Departement departement) {
 		this.departement = departement;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+	public LocalDateTime getTokenCreationDate() {
+		return tokenCreationDate;
+	}
+	public void setTokenCreationDate(LocalDateTime tokenCreationDate) {
+		this.tokenCreationDate = tokenCreationDate;
 	}
 	
 

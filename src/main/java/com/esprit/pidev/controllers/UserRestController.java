@@ -2,7 +2,7 @@ package com.esprit.pidev.controllers;
 
 import java.io.IOException;
 import java.net.URI;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,13 +20,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -46,6 +52,7 @@ import lombok.Data;
 @RestController
 @RequestMapping("/user")
 public class UserRestController {
+	
 	@Autowired
 	ServiceIUser userService ; 
 	
@@ -54,6 +61,8 @@ public class UserRestController {
 		return  ResponseEntity.ok().body(userService.getUsers()) ; 
 	}
 	
+	
+
 	@GetMapping("/token/refresh")
 	public void refreshToken (HttpServletRequest request, HttpServletResponse response)throws IOException{
 		String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION) ;
@@ -107,7 +116,48 @@ public class UserRestController {
 	return msg; 
 	}
 	
+	@GetMapping("/mydetails")
+	public User  getMyAccount(HttpServletRequest request, HttpServletResponse response  , Authentication authentication)throws IOException{
+		String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION) ;
+	
+		if (authorizationHeader != null && authorizationHeader.startsWith("before ") ){
+				String refresh_token = authorizationHeader.substring("before ".length()) ; 
+				Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+				JWTVerifier verifier = JWT.require(algorithm).build() ; 
+				DecodedJWT decodedJWT = verifier.verify(refresh_token) ; 
+				String username = decodedJWT.getSubject() ;
+				return  userService.findUserByUserName(username) ; 
+	}
+		return null;
+	}
+	
+	@PutMapping(value = "/users/{username}") 
+	@ResponseBody
+	public void acctiverAccount (@PathVariable("username") String username){
+		userService.activerAccount(username);
+	}
+	
+	@PostMapping("/registration/forgot-password")
+	public String forgotPassword(@RequestParam String email) {
+
+		String response = userService.forgotPassword(email);
+
+		if (!response.startsWith("Invalid")) {
+			response = "http://localhost:8081/LevelUp/user/registration/reset-password?token=" + response;
+		}
+		return response;
+	}
+
+	@PutMapping("/registration/reset-password")
+	public String resetPassword(@RequestParam String token,
+			@RequestParam String password) {
+
+		return userService.resetPassword(token, password);
+	}
+	
+}
+	
 
 
 	
-}
+
