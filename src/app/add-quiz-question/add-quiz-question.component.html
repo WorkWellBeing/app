@@ -1,0 +1,75 @@
+<div
+  class="banner-innerpage"
+  style="background-image: url(assets/images/landingpage/banner-bg2.jpg)"
+>
+  <div class="container">
+    <!-- Row  -->
+    <div class="row justify-content-center">
+      <!-- Column -->
+      <div class="col-lg-9 col-md-6 no-trans align-self-center text-center">
+        <h1 class="title">Add Question PAGE</h1>
+      </div>
+      <!-- Column -->
+    </div>
+  </div>
+</div>
+
+
+<div class="col-md-8 offset-md-2">
+    <h1>Add Question</h1>
+    <h3>Only one question should be correct</h3>
+    <form #f="ngForm" (ngSubmit)="onSubmit()" >
+        <div class="form-group">
+            <label>Question</label>
+            <input  type="text" class="form-control" placeholder="Qusetion" id="titre" required  ngModel #i="ngModel" [(ngModel)]="question" name="question" >
+        </div>
+        <div class="alert alert-danger" *ngIf="i.invalid && i.touched">
+            question is required
+        </div>
+        
+        <div class="form-group">     
+            <label>Answer 1</label>
+            <input type="text" class="form-control" placeholder="Answer 1" id="titre"  required ngModel #j="ngModel"  [(ngModel)]="answer1" name="answer1"> 
+            <div class="chekbox">
+                <label class="checkbox-inline"><input type="checkbox" value=""   (change)="onChekbox1($event)">isCorrect</label> 
+            </div>      
+        </div>
+        <div class="alert alert-danger" *ngIf="j.invalid && j.touched">
+            answer1 is required
+        </div>
+
+        <div class="form-group">
+            <label>Answer 2</label>
+            <input type="text" class="form-control" placeholder="Answer 2" id="titre" required  ngModel #k="ngModel"  [(ngModel)]="answer2" name="answer2">
+            <div class="chekbox">
+                <label class="checkbox-inline"><input type="checkbox" value=""  (change)="onChekbox2($event)">isCorrect</label> 
+            </div> 
+        </div>
+        <div class="alert alert-danger" *ngIf="k.invalid && k.touched">
+            answer2 is required
+        </div>
+
+        <div class="form-group">
+            <label>Answer 3</label>
+            <input type="text" class="form-control" placeholder="Answer 3" id="titre" required  ngModel #l="ngModel"  [(ngModel)]="answer3" name="answer3">
+            <div class="chekbox">
+                <label class="checkbox-inline"><input type="checkbox" value="" (change)="onChekbox3($event)">isCorrect</label> 
+            </div> 
+        </div>
+        <div class="alert alert-danger" *ngIf="l.invalid && l.touched">
+            answer3 is required
+        </div>
+
+        <div class="form-group">
+            <label>Answer 4</label>
+            <input type="text" class="form-control" placeholder="Answer 4" id="titre" required ngModel #m="ngModel"  [(ngModel)]="answer4" name="answer4">
+            <div class="chekbox">
+                <label class="checkbox-inline"><input type="checkbox" value=""  (change)="onChekbox4($event)">isCorrect</label> 
+            </div> 
+        </div>
+        <div class="alert alert-danger" *ngIf="m.invalid && m.touched">
+            answer4 is required
+        </div>
+        <button [disabled]="disable || f.invalid" class="btn btn-success" type="submit">Submit</button>
+    </form>      
+</div>

@@ -1,0 +1,69 @@
+<div
+  class="banner-innerpage"
+  style="background-image: url(assets/images/landingpage/banner-bg2.jpg)"
+>
+  <div class="container">
+    <!-- Row  -->
+    <div class="row justify-content-center">
+      <!-- Column -->
+      <div class="col-lg-9 col-md-6 no-trans align-self-center text-center">
+        <h1 class="title">Quiz PAGE</h1>
+      </div>
+      <!-- Column -->
+    </div>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+      <button type="button" class="btn btn-success" (click)="addQuiz()">Add</button>
+      <button type="button" class="btn btn-success" (click)="getAllQuizTs()">Quizs Classe By Taux Success</button>
+      <button type="button" class="btn btn-success" (click)="getAllQuizPm()">Quizs Classe By Pourcentage Note Moyenne</button>
+   
+  </div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-md-12">
+      
+      <div class="card text-center" >
+        <table class="table">
+            <tr><th>Title</th><th>Post Date </th><th>Marks</th><th>Poster</th><th>Taux Success</th><th>Pourcentage Note Moyenne</th><th>Actions</th><th>Traiter</th><th>Poster</th></tr>
+            <tbody  *ngFor='let q of listQuiz' >
+            <tr> 
+              
+              <td>{{q.titre}}</td>
+              <td>{{q.postDateTime | date:'YYYY-MM-dd'}}</td>
+              <td>{{q.marks}}</td>
+              <td *ngIf="q.poster==true">
+                <span></span>
+                poster
+              </td>
+              <td *ngIf="q.poster==false">
+                  <span></span>
+                  non poster
+              </td>  
+              <td>{{q.tauxSuccee}}%</td>
+              <td>{{q.pourcentageNoteMoyenne}}%</td>
+              <td>
+                 
+                <button type="button" class="btn btn-outline-warning" (click)="updateQuiz(q.idQuiz)" >update</button>
+                <button type="button" class="btn btn-outline-danger" (click)="deleteQuiz(q.idQuiz)">delete</button> 
+                                               
+             </td>    
+             <td>
+              <button type="button" class="btn btn-outline-primary" (click)="traiterQuiz(q.idQuiz)">Traiter Quiz</button> 
+             </td>
+             <td>
+              <button type="button" class="btn btn-outline-success" (click)="posterQuiz(q.idQuiz)">poster Quiz</button>  
+              <button type="button" class="btn btn-outline-secondary" (click)="unposterQuiz(q.idQuiz)">unposter Quiz</button> 
+             </td>
+            </tr>
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>  
+
+  

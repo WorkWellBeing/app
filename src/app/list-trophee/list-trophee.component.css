@@ -1,0 +1,13 @@
+.quantity__input {
+    width: 32px;
+    height: 45px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    border-top: 2px solid #dee0ee;
+    border-bottom: 2px solid #dee0ee;
+    border-left: 1px solid #dee0ee;
+    border-right: 2px solid #dee0ee;
+    background:gray;
+    color: black;
+  }

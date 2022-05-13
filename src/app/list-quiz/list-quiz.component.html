@@ -1,0 +1,33 @@
+<div
+  class="banner-innerpage"
+  style="background-image: url(assets/images/landingpage/banner-bg2.jpg)"
+>
+  <div class="container">
+    <!-- Row  -->
+    <div class="row justify-content-center">
+      <!-- Column -->
+      <div class="col-lg-9 col-md-6 no-trans align-self-center text-center">
+        <h1 class="title">List Quiz PAGE</h1>
+      </div>
+      <!-- Column -->
+    </div>
+  </div>
+</div>
+
+
+
+<div class="col-md-6 offset-md-3">
+    <h3>List Quiz</h3>
+
+    <ul class="list-group list-group-flush" >
+        <li class="list-group-item d-flex justify-content-between align-items-start" *ngFor='let q of listQuiz ,let i=index'>
+            <div class="ms-2 me-auto">
+                <div class="fw-bold">Titre: {{q.titre}} </div>  
+                Marks: {{q.marks}}             
+            </div>
+            <button type="button" class="btn btn-outline-success" (click)="passerQuiz(q.idQuiz)" >Passer Quiz</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="verifierNote(q.idQuiz)">Verifier Note</button>
+        </li>
+        
+      </ul>
+</div>

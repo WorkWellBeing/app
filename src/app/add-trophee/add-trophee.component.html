@@ -1,0 +1,37 @@
+<div
+  class="banner-innerpage"
+  style="background-image: url(assets/images/landingpage/banner-bg2.jpg)"
+>
+  <div class="container">
+    <!-- Row  -->
+    <div class="row justify-content-center">
+      <!-- Column -->
+      <div class="col-lg-9 col-md-6 no-trans align-self-center text-center">
+        <h1 class="title">Add Trophee PAGE</h1>
+      </div>
+      <!-- Column -->
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6 offset-md-3">
+    <h3>Add Trophee</h3>
+    <form (ngSubmit)="onSubmit()">
+        <div class="container">
+            <div class="picture-container">
+                <div class="picture">
+                    <img [src]="url" class="picture-src" id="wizardPicturePreview" title="">
+                    <input type="file" id="img" accept="image/*" class="" (change)="onSelect($event)">
+                </div>
+                 <h6 class="">Choose Picture</h6>
+        
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Titre</label>
+            <input type="text" class="form-control" placeholder="Rate Titre" id="titre" [(ngModel)]="trophee.titre" [ngModelOptions]="{standalone: true}">
+        </div>
+        
+        <button class="btn btn-success" type="submit">Submit</button>
+    </form>
+</div>

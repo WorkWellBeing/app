@@ -1,0 +1,49 @@
+<div
+  class="banner-innerpage"
+  style="background-image: url(assets/images/landingpage/banner-bg2.jpg)"
+>
+  <div class="container">
+    <!-- Row  -->
+    <div class="row justify-content-center">
+      <!-- Column -->
+      <div class="col-lg-9 col-md-6 no-trans align-self-center text-center">
+        <h1 class="title"> Rate PAGE</h1>
+      </div>
+      <!-- Column -->
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-6">
+    <button type="button" class="btn btn-success" (click)="addRate()">Add</button>
+    <button type="button" class="btn btn-success" (click)="getAllRatesClasse()">Rate Classe</button>
+ 
+</div>
+  
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    
+    <div class="card text-center" >
+      <table class="table">
+          <tr><th>Title</th><th>Pourcentage</th><th>Actions</th></tr>
+          <tbody  *ngFor='let rate of listRate' >
+          <tr> 
+            
+            <td>{{rate.titre}}</td>
+            <td>{{rate.pourcentagePoints}}</td>
+            <td>
+              <button type="button" class="btn btn-outline-warning" (click)="updateRate(rate.idRate)" >update</button>
+              <button type="button" class="btn btn-outline-danger"(click)="deleteRate(rate.idRate)">delete</button>                               
+           </td>    
+          </tr>
+          </tbody>
+      </table>
+    </div>
+  </div>
+</div>  
+
+
